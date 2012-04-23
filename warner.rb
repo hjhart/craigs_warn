@@ -4,6 +4,7 @@
   require 'ap'
   require 'uri'
   require 'cgi'
+  require 'fileutils'
   
   def prowl_message event, description, url=nil
     require 'prowl'
@@ -30,7 +31,10 @@
   listing = CraigScrape::Listings.new "http://sfbay.craigslist.org/search/?areaID=1&subAreaID=&query=#{search_term}&catAbb=sss"
   current_listings_count = listing.posts.length
   puts "Found %d posts for the search '#{decoded_search_term}' on this page" % current_listings_count
+  
+  FileUtils.mkdir_p('search_counts')
   search_count_file = File.join('search_counts', search_term)
+  
   if(File.exists? search_count_file)
     previous_listing_count = File.open(search_count_file, 'r').read.to_i
   else
@@ -40,12 +44,15 @@
   end
   
   
-  if previous_listing_count != current_listings_count
+  if current_listings_count > previous_listing_count
     last_posting = listing.posts.first
-    event, description = "Counts don't match", "Posting titled: #{last_posting}"
+    event, description = "Counts don't match", "Posting titled: #{last_posting.label}"
     File.open(search_count_file, 'w') { |f| f.puts current_listings_count }
     puts "Sending prowl message: #{event}, #{description}"
     prowl_message "New Craigslist Post", last_posting.label, last_posting.url
+  elsif current_listings_count < previous_listing_count
+    File.open(search_count_file, 'w') { |f| f.puts current_listings_count }
+    puts "Less postings detected. Decreasing the count."
   else
     puts "The count was the same (at #{current_listings_count})"
   end
