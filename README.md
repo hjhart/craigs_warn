@@ -10,6 +10,10 @@ It also only works (due to improper dependencies) if you install nokogiri and ht
 Copy the prowl template and add your API key
 
 	cp prowl.template.yml prowl.yml
+
+Enter your search terms into the search_terms.yml file, one per line
+
+
 	
 Install in yer crontab:
 
