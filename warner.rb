@@ -6,7 +6,7 @@ require 'cgi'
 require 'fileutils'
 require 'prowl_notifier'
 require 'yaml'
-
+require 'pony'
 search_terms_file = File.join  'search_terms.yml'
 search_terms = YAML.load File.open(search_terms_file).read
 
@@ -14,6 +14,7 @@ search_terms.each do |decoded_search_term|
   search_term = CGI.escape(decoded_search_term)
 
   url = "http://sfbay.craigslist.org/search/?areaID=1&subAreaID=&query=#{search_term}&catAbb=sss"
+  # url = "http://sfbay.craigslist.org/search/jjj?query=executive+assistant&srchType=A"
   listing = CraigScrape::Listings.new url
   current_listings_count = listing.posts.length
   puts "Found %d posts for the search '#{decoded_search_term}' on this page" % current_listings_count
