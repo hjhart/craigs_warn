@@ -24,7 +24,7 @@ def brittany_prowl_message event, description, url=nil
 end
 
 def send_email event, description, url=nil
-  #Pony.mail(:to => 'ejensen255@gmail.com', :from => 'notifications@hjhart.com', :subject => "#{event}", :body => "#{event}\n#{description}\n#{url}")
+  Pony.mail(:to => 'ejensen255@gmail.com', :from => 'notifications@hjhart.com', :subject => "#{event}", :body => "#{event}\n#{description}\n#{url}")
   Pony.mail(:to => 'hjhart@gmail.com', :from => 'notifications@hjhart.com', :subject => "#{event}", :body => "#{event}\n#{description}\n#{url}")
-  #Pony.mail(:to => 'bsoch0um@gmail.com', :from => 'notifications@hjhart.com', :subject => "#{event}", :body => "#{event}\n#{description}\n#{url}")
+  Pony.mail(:to => 'bsoch0um@gmail.com', :from => 'notifications@hjhart.com', :subject => "#{event}", :body => "#{event}\n#{description}\n#{url}")
 end
